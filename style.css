@@ -187,5 +187,83 @@ h2 {
   line-height: 1.6;
 }
 
+/* 📖 書本按鈕 */
+.book-toggle-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  font-size: 1.8rem;
+  background: #5a3e36;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.book-toggle-btn:hover {
+  background-color: #3e2b26;
+}
+
+/* 📖 書本Overlay */
+.book-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-open {
+  display: flex;
+}
+
+.fullscreen-book {
+  background: #fffef9;
+  padding: 2rem 3rem;
+  border-radius: 16px;
+  max-width: 90vw;
+  width: 900px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+  animation: fadeInBook 0.4s ease;
+}
+
+@keyframes fadeInBook {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fullscreen-book h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #5a3e36;
+}
+
+.fullscreen-book .history-entry {
+  border-left: 4px solid #5a3e36;
+  margin-bottom: 2rem;
+  padding-left: 1rem;
+  background: #fffef6;
+  border-radius: 8px;
+  text-align: left;
+}
+
 
 
