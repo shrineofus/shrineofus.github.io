@@ -53,6 +53,12 @@
 
   function renderCard(targetId, icon, card) {
     const container = document.getElementById(targetId);
+    const cardBox = container.closest(".card");
+
+    // ✅ 注入正逆位樣式 class
+    cardBox.classList.remove("upright", "reversed");
+    cardBox.classList.add(card.orientation === "正位" ? "upright" : "reversed");
+
     container.innerHTML = `
       <h3>【${card.title}】｜${card.orientation}</h3>
       <p>${icon} ${card.spell}</p>
@@ -76,6 +82,3 @@
     renderCard("sub-result", "🕯️", card);
   });
 </script>
-
-
-
