@@ -40,7 +40,7 @@
     leftPage.innerHTML = mainCard ? `
       <h3>📅 ${mainCard.time}</h3>
       <div class="history-entry">
-        <p><strong>【${mainCard.type}】${mainCard.title}｜${mainCard.orientation}</strong></p>
+        <p><strong>（${mainCard.type}）${mainCard.title}｜${mainCard.orientation}</strong></p>
         <p>🔮 ${mainCard.spell}</p>
         <p>${mainCard.description}</p>
       </div>
@@ -49,13 +49,14 @@
     rightPage.innerHTML = subCard ? `
       <h3>📅 ${subCard.time}</h3>
       <div class="history-entry">
-        <p><strong>【${subCard.type}】${subCard.title}｜${subCard.orientation}</strong></p>
-        <p>🕯️ ${subCard.spell}</p>
+        <p><strong>（${subCard.type}）${subCard.title}｜${subCard.orientation}</strong></p>
+        <p>🔧 ${subCard.spell}</p>
         <p>${subCard.description}</p>
       </div>
     ` : `<p>尚未抽出副牌。</p>`;
   }
 </script>
+
 
 
 
