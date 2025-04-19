@@ -45,8 +45,8 @@
       return {
         title: card.title,
         orientation,
-        spell: isReversed ? card.reverse_spell : card.upright_spell,
-        description: isReversed ? card.reverse_description : card.upright_description
+        spell: isReversed ? card.reversed_spell : card.upright_spell,
+        description: isReversed ? card.reversed_meaning : card.upright_meaning
       };
     }
 
@@ -70,4 +70,5 @@
   </script>
 </body>
 </html>
+
 
