@@ -1,4 +1,4 @@
-/* 字體設定 */
+/* 字體設定 *//* 字體設定 */
 body {
   font-family: "Noto Sans TC", sans-serif;
   background-color: #fffaf5;
@@ -53,8 +53,6 @@ h1, h2, h3 {
   margin: 0.2rem 0;
   line-height: 1.6;
 }
-
-/* 其餘原本CSS保持不變 */
 
 
 
