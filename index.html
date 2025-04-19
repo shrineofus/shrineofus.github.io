@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -22,6 +22,7 @@
         <h2>命運主牌</h2>
         <div class="content" id="main-result">請翻開命運之書...</div>
       </div>
+
       <div class="card" id="sub-card">
         <h2>命定副牌</h2>
         <div class="content" id="sub-result">靜候詠讀之聲降臨...</div>
@@ -29,10 +30,10 @@
     </section>
   </main>
 
-  <!-- 書本浮動按鈕 -->
+  <!-- 📖 書本按鈕 -->
   <button class="book-toggle-btn" id="open-book">📖</button>
 
-  <!-- 書本彈出視窗 -->
+  <!-- 📚 書本全螢幕容器 -->
   <div class="book-overlay" id="book-overlay">
     <div class="fullscreen-book">
       <h2>命運之書</h2>
@@ -48,34 +49,30 @@
     import cards from './cards_full_with_minor.js';
 
     function drawCard(type) {
-      const cardPool = cards.filter(card => card.type === type);
-      const card = cardPool[Math.floor(Math.random() * cardPool.length)];
-      const isReversed = Math.random() < 0.5;
-      const orientation = isReversed ? '逆位' : '正位';
+      const pool = cards.filter(c => c.type === type);
+      const card = pool[Math.floor(Math.random() * pool.length)];
+      const reversed = Math.random() < 0.5;
       return {
         title: card.title,
-        orientation,
-        spell: isReversed ? card.reversed_spell : card.upright_spell,
-        description: isReversed ? card.reversed_meaning : card.upright_meaning
+        orientation: reversed ? '逆位' : '正位',
+        spell: reversed ? card.reversed_spell : card.upright_spell,
+        description: reversed ? card.reversed_meaning : card.upright_meaning
       };
     }
 
     function renderCard(targetId, icon, card) {
       const container = document.getElementById(targetId);
       const cardBox = container.closest(".card");
-      cardBox.classList.remove("upright", "reversed");
-      cardBox.classList.add(card.orientation === "正位" ? "upright" : "reversed");
-      cardBox.classList.remove("card-animate");
+      cardBox.classList.remove("upright", "reversed", "card-animate");
       void cardBox.offsetWidth;
-      cardBox.classList.add("card-animate");
+      cardBox.classList.add(card.orientation === "正位" ? "upright" : "reversed", "card-animate");
 
       container.innerHTML = `
         <h3>【${card.title}】｜${card.orientation}</h3>
         <p>${icon} ${card.spell}</p>
         <button class="toggle-btn">點我揭示牌意 👁️</button>
-        <div class="card-description" style="display: none;">${card.description}</div>
+        <div class="card-description" style="display:none;">${card.description}</div>
       `;
-
       container.querySelector(".toggle-btn").addEventListener("click", () => {
         const desc = container.querySelector(".card-description");
         desc.style.display = desc.style.display === "none" ? "block" : "none";
@@ -84,8 +81,8 @@
 
     function saveToHistory(card, type) {
       const log = JSON.parse(localStorage.getItem("drawHistory") || "[]");
-      const now = new Date().toLocaleString();
-      log.unshift({ type, title: card.title, orientation: card.orientation, spell: card.spell, description: card.description, time: now });
+      const time = new Date().toLocaleString();
+      log.unshift({ type, ...card, time });
       localStorage.setItem("drawHistory", JSON.stringify(log));
     }
 
@@ -101,6 +98,7 @@
       saveToHistory(card, "副牌");
     });
 
+    // 書本功能
     const bookBtn = document.getElementById('open-book');
     const overlay = document.getElementById('book-overlay');
     const closeBtn = document.getElementById('close-book');
@@ -129,7 +127,8 @@
           <p><strong>【${mainCard.type}】${mainCard.title}｜${mainCard.orientation}</strong></p>
           <p>🔮 ${mainCard.spell}</p>
           <p>${mainCard.description}</p>
-        </div>` : `<p>尚未抽出主牌。</p>`;
+        </div>
+      ` : '<p>尚未抽出主牌。</p>';
 
       rightPage.innerHTML = subCard ? `
         <h3>📅 ${subCard.time}</h3>
@@ -137,8 +136,10 @@
           <p><strong>【${subCard.type}】${subCard.title}｜${subCard.orientation}</strong></p>
           <p>🕯️ ${subCard.spell}</p>
           <p>${subCard.description}</p>
-        </div>` : `<p>尚未抽出副牌。</p>`;
+        </div>
+      ` : '<p>尚未抽出副牌。</p>';
     }
   </script>
 </body>
 </html>
+
