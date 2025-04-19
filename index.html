@@ -4,8 +4,11 @@
 <!-- 📚 書本全螢幕容器 -->
 <div class="book-overlay" id="book-overlay">
   <div class="fullscreen-book">
-    <h2>命運日記</h2>
-    <div id="fullscreen-history"></div>
+    <h2>命運之書</h2>
+    <div id="fullscreen-book-pages" class="book-pages">
+      <div class="book-left-page"></div>
+      <div class="book-right-page"></div>
+    </div>
     <button class="toggle-btn" id="close-book">關閉命運之書</button>
   </div>
 </div>
@@ -14,40 +17,45 @@
   const bookBtn = document.getElementById('open-book');
   const overlay = document.getElementById('book-overlay');
   const closeBtn = document.getElementById('close-book');
-  const fullscreenContainer = document.getElementById('fullscreen-history');
+  const leftPage = document.querySelector('.book-left-page');
+  const rightPage = document.querySelector('.book-right-page');
 
   bookBtn.addEventListener('click', () => {
     overlay.classList.add('book-open');
-    renderFullscreenHistory();
+    renderBookPages();
   });
 
   closeBtn.addEventListener('click', () => {
     overlay.classList.remove('book-open');
   });
 
-  function renderFullscreenHistory() {
+  function renderBookPages() {
     const log = JSON.parse(localStorage.getItem("drawHistory") || "[]");
-    const grouped = {};
+    const today = new Date().toLocaleDateString();
+    const entries = log.filter(e => e.time.startsWith(today));
 
-    log.forEach(entry => {
-      const date = entry.time.split(',')[0];
-      if (!grouped[date]) grouped[date] = [];
-      grouped[date].push(entry);
-    });
+    const mainCard = entries.find(e => e.type === "主牌");
+    const subCard = entries.find(e => e.type === "副牌");
 
-    fullscreenContainer.innerHTML = Object.entries(grouped).map(([date, entries]) => `
-      <div class="history-day">
-        <h3>${date}</h3>
-        ${entries.map(item => `
-          <div class="history-entry">
-            <p><strong>【${item.type}】${item.title}｜${item.orientation}</strong></p>
-            <p>🔮 ${item.spell}</p>
-            <p>${item.description}</p>
-          </div>
-        `).join('')}
+    leftPage.innerHTML = mainCard ? `
+      <h3>📅 ${mainCard.time}</h3>
+      <div class="history-entry">
+        <p><strong>【${mainCard.type}】${mainCard.title}｜${mainCard.orientation}</strong></p>
+        <p>🔮 ${mainCard.spell}</p>
+        <p>${mainCard.description}</p>
       </div>
-    `).join('');
+    ` : `<p>尚未抽出主牌。</p>`;
+
+    rightPage.innerHTML = subCard ? `
+      <h3>📅 ${subCard.time}</h3>
+      <div class="history-entry">
+        <p><strong>【${subCard.type}】${subCard.title}｜${subCard.orientation}</strong></p>
+        <p>🕯️ ${subCard.spell}</p>
+        <p>${subCard.description}</p>
+      </div>
+    ` : `<p>尚未抽出副牌。</p>`;
   }
 </script>
+
 
 
