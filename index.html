@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shrine of Us · 命運雙牌儀式</title>
+  <title>Shrine of Us・命運雙牌儀式</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <main class="shrine">
-    <h1>🔮 Shrine of Us · 命運雙牌儀式 🔮</h1>
+    <h1>🔮 Shrine of Us ・命運雙牌儀式 🔮</h1>
     <p class="subtitle">這裡即將展開專屬於你的命運雙牌儀式</p>
 
     <div class="deck">
@@ -19,21 +19,55 @@
     <section class="results">
       <div class="card" id="main-card">
         <h2>命運主牌</h2>
-        <div class="content" id="main-result">請翻開命運之書...</div>
+        <div class="content" id="main-result">
+          請翻開命運之書...
+        </div>
       </div>
+
       <div class="card" id="sub-card">
         <h2>命定副牌</h2>
-        <div class="content" id="sub-result">靜候詭譚之聲降臨...</div>
+        <div class="content" id="sub-result">
+          靜候詠讀之聲降臨...
+        </div>
       </div>
     </section>
   </main>
 
   <script type="module">
-  import cards from './cards_full_major_minor.js';
+    import cards from './cards_full_major_minor.js';
 
-  // 範例：抽一張正位主牌
-  const mainCards = cards.filter(card => card.type === "主牌");
-  const randomMainCard = mainCards[Math.floor(Math.random() * mainCards.length)];
-  console.log("🎴 抽到主牌：", randomMainCard.title, randomMainCard.upright_spell);
-</script>
+    function drawCard(type) {
+      const cardPool = cards.filter(card => card.type === type);
+      const card = cardPool[Math.floor(Math.random() * cardPool.length)];
+      const isReversed = Math.random() < 0.5;
+      const orientation = isReversed ? '逆位' : '正位';
+
+      return {
+        title: card.title,
+        orientation,
+        spell: isReversed ? card.reverse_spell : card.upright_spell,
+        description: isReversed ? card.reverse_description : card.upright_description
+      };
+    }
+
+    document.getElementById("draw-main").addEventListener("click", () => {
+      const card = drawCard("主牌");
+      document.getElementById("main-result").innerHTML = `
+        <h3>【${card.title}】｜${card.orientation}</h3>
+        <p>🔮 ${card.spell}</p>
+        <p>${card.description}</p>
+      `;
+    });
+
+    document.getElementById("draw-sub").addEventListener("click", () => {
+      const card = drawCard("副牌");
+      document.getElementById("sub-result").innerHTML = `
+        <h3>【${card.title}】｜${card.orientation}</h3>
+        <p>🕯️ ${card.spell}</p>
+        <p>${card.description}</p>
+      `;
+    });
+  </script>
+</body>
+</html>
 
