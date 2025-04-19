@@ -33,7 +33,7 @@
     </section>
   </main>
 
-  <script type="module">
+<script type="module">
   import cards from './cards_full_with_minor.js';
 
   function drawCard(type) {
@@ -50,22 +50,29 @@
     };
   }
 
+  function renderCard(targetId, icon, card) {
+    const container = document.getElementById(targetId);
+    container.innerHTML = `
+      <h3>【${card.title}】｜${card.orientation}</h3>
+      <p>${icon} ${card.spell}</p>
+      <button class="toggle-btn">點我揭示牌意 👁️</button>
+      <div class="card-description" style="display: none;">${card.description}</div>
+    `;
+
+    container.querySelector(".toggle-btn").addEventListener("click", () => {
+      const desc = container.querySelector(".card-description");
+      desc.style.display = desc.style.display === "none" ? "block" : "none";
+    });
+  }
+
   document.getElementById("draw-main").addEventListener("click", () => {
     const card = drawCard("主牌");
-    document.getElementById("main-result").innerHTML = `
-      <h3>【${card.title}】｜${card.orientation}</h3>
-      <p>🔮 ${card.spell}</p>
-      <p>${card.description}</p>
-    `;
+    renderCard("main-result", "🔮", card);
   });
 
   document.getElementById("draw-sub").addEventListener("click", () => {
     const card = drawCard("副牌");
-    document.getElementById("sub-result").innerHTML = `
-      <h3>【${card.title}】｜${card.orientation}</h3>
-      <p>🕯️ ${card.spell}</p>
-      <p>${card.description}</p>
-    `;
+    renderCard("sub-result", "🕯️", card);
   });
 </script>
 
