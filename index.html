@@ -1,172 +1,53 @@
-<!DOCTYPE html><!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shrine of Us・命運雙牌儀式</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
-</head>
-<body>
-  <main class="shrine">
-    <h1>🔮 Shrine of Us ・命運雙牌儀式 🔮</h1>
-    <p class="subtitle">這裡即將展開專屬於你的命運雙牌儀式</p>
+<!-- 📖 書本按鈕 -->
+<button class="book-toggle-btn" id="open-book">📖</button>
 
-    <div class="deck">
-      <button id="draw-main">抽出主牌</button>
-      <button id="draw-sub">抽出副牌</button>
-    </div>
+<!-- 📚 書本全螢幕容器 -->
+<div class="book-overlay" id="book-overlay">
+  <div class="fullscreen-book">
+    <h2>命運日記</h2>
+    <div id="fullscreen-history"></div>
+    <button class="toggle-btn" id="close-book">關閉命運之書</button>
+  </div>
+</div>
 
-    <section class="results">
-      <div class="card" id="main-card">
-        <h2>命運主牌</h2>
-        <div class="content" id="main-result">
-          請翻開命運之書...
-        </div>
+<script>
+  const bookBtn = document.getElementById('open-book');
+  const overlay = document.getElementById('book-overlay');
+  const closeBtn = document.getElementById('close-book');
+  const fullscreenContainer = document.getElementById('fullscreen-history');
+
+  bookBtn.addEventListener('click', () => {
+    overlay.classList.add('book-open');
+    renderFullscreenHistory();
+  });
+
+  closeBtn.addEventListener('click', () => {
+    overlay.classList.remove('book-open');
+  });
+
+  function renderFullscreenHistory() {
+    const log = JSON.parse(localStorage.getItem("drawHistory") || "[]");
+    const grouped = {};
+
+    log.forEach(entry => {
+      const date = entry.time.split(',')[0];
+      if (!grouped[date]) grouped[date] = [];
+      grouped[date].push(entry);
+    });
+
+    fullscreenContainer.innerHTML = Object.entries(grouped).map(([date, entries]) => `
+      <div class="history-day">
+        <h3>${date}</h3>
+        ${entries.map(item => `
+          <div class="history-entry">
+            <p><strong>【${item.type}】${item.title}｜${item.orientation}</strong></p>
+            <p>🔮 ${item.spell}</p>
+            <p>${item.description}</p>
+          </div>
+        `).join('')}
       </div>
+    `).join('');
+  }
+</script>
 
-      <div class="card" id="sub-card">
-        <h2>命定副牌</h2>
-        <div class="content" id="sub-result">
-          靜候詠讀之聲降臨...
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <section class="history-book">
-    <h2>📖 命運日記</h2>
-    <div class="book-controls">
-      <button id="prev-page">← 前一頁</button>
-      <span id="page-label">今日</span>
-      <button id="next-page">下一頁 →</button>
-    </div>
-    <div id="book-content" class="book-page"></div>
-  </section>
-
-  <script type="module">
-    import cards from './cards_full_with_minor.js';
-
-    function drawCard(type) {
-      const cardPool = cards.filter(card => card.type === type);
-      const card = cardPool[Math.floor(Math.random() * cardPool.length)];
-      const isReversed = Math.random() < 0.5;
-      const orientation = isReversed ? '逆位' : '正位';
-
-      return {
-        title: card.title,
-        orientation,
-        spell: isReversed ? card.reversed_spell : card.upright_spell,
-        description: isReversed ? card.reversed_meaning : card.upright_meaning
-      };
-    }
-
-    function renderCard(targetId, icon, card) {
-      const container = document.getElementById(targetId);
-      const cardBox = container.closest(".card");
-
-      cardBox.classList.remove("upright", "reversed");
-      cardBox.classList.add(card.orientation === "正位" ? "upright" : "reversed");
-      cardBox.classList.remove("card-animate");
-      void cardBox.offsetWidth;
-      cardBox.classList.add("card-animate");
-
-      container.innerHTML = `
-        <h3>【${card.title}】｜${card.orientation}</h3>
-        <p>${icon} ${card.spell}</p>
-        <button class="toggle-btn">點我揭示牌意 👁️</button>
-        <div class="card-description" style="display: none;">${card.description}</div>
-      `;
-
-      container.querySelector(".toggle-btn").addEventListener("click", () => {
-        const desc = container.querySelector(".card-description");
-        desc.style.display = desc.style.display === "none" ? "block" : "none";
-      });
-    }
-
-    function saveToHistory(card, type) {
-      const log = JSON.parse(localStorage.getItem("drawHistory") || "[]");
-      const now = new Date().toLocaleString();
-      log.unshift({ type, title: card.title, orientation: card.orientation, spell: card.spell, description: card.description, time: now });
-      localStorage.setItem("drawHistory", JSON.stringify(log));
-      renderBookPages();
-    }
-
-    let historyPages = [];
-    let currentPage = 0;
-
-    function renderBookPages() {
-      const log = JSON.parse(localStorage.getItem("drawHistory") || "[]");
-      const grouped = {};
-
-      log.forEach(entry => {
-        const date = entry.time.split(',')[0];
-        if (!grouped[date]) grouped[date] = [];
-        grouped[date].push(entry);
-      });
-
-      historyPages = Object.entries(grouped).map(([date, entries]) => {
-        return {
-          date,
-          html: `
-            <h3>${date}</h3>
-            ${entries.map(item => `
-              <div class="history-entry">
-                <p>【${item.type}】${item.title}｜${item.orientation}</p>
-                <p><em>${item.spell}</em></p>
-                <p>${item.description}</p>
-              </div>
-            `).join('')}
-          `
-        };
-      });
-
-      currentPage = 0;
-      renderCurrentPage();
-    }
-
-    function renderCurrentPage() {
-      const book = document.getElementById("book-content");
-      const label = document.getElementById("page-label");
-      if (historyPages.length === 0) {
-        book.innerHTML = "<p>尚無任何命運紀錄。</p>";
-        label.textContent = "無紀錄";
-        return;
-      }
-
-      const page = historyPages[currentPage];
-      book.innerHTML = page.html;
-      label.textContent = page.date;
-    }
-
-    document.getElementById("prev-page").addEventListener("click", () => {
-      if (currentPage < historyPages.length - 1) {
-        currentPage++;
-        renderCurrentPage();
-      }
-    });
-
-    document.getElementById("next-page").addEventListener("click", () => {
-      if (currentPage > 0) {
-        currentPage--;
-        renderCurrentPage();
-      }
-    });
-
-    document.getElementById("draw-main").addEventListener("click", () => {
-      const card = drawCard("主牌");
-      renderCard("main-result", "🔮", card);
-      saveToHistory(card, "主牌");
-    });
-
-    document.getElementById("draw-sub").addEventListener("click", () => {
-      const card = drawCard("副牌");
-      renderCard("sub-result", "🕯️", card);
-      saveToHistory(card, "副牌");
-    });
-
-    renderBookPages();
-  </script>
-</body>
-</html>
 
