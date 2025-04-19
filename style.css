@@ -164,10 +164,28 @@ h2 {
   text-align: left;
 }
 
-.history-entry {
-  margin-bottom: 1.5rem;
-  border-left: 3px solid #5a3e36;
-  padding-left: 1rem;
+.book-page h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.5rem;
+  text-align: center;
+  color: #5a3e36;
 }
+
+.history-entry {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #fffaf0;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.03);
+  text-align: left;
+}
+
+.history-entry p {
+  margin: 0.2rem 0;
+  line-height: 1.6;
+}
+
 
 
