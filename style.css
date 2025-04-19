@@ -1,3 +1,4 @@
+/* 字體設定 */
 body {
   font-family: "Noto Sans TC", sans-serif;
   background-color: #fffaf5;
@@ -7,6 +8,12 @@ body {
   margin: 0;
 }
 
+/* 標題使用 Playfair Display 儀式字體 */
+h1, h2, h3 {
+  font-family: 'Playfair Display', serif;
+}
+
+/* 頁面排版 */
 .shrine {
   max-width: 700px;
   margin: 0 auto;
@@ -15,14 +22,20 @@ body {
 h1 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  font-style: italic;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .subtitle {
   font-size: 1.2rem;
   margin-bottom: 2rem;
   color: #666;
+  font-style: italic;
+  letter-spacing: 0.5px;
 }
 
+/* 抽牌按鈕樣式 */
 .deck {
   margin-bottom: 2rem;
 }
@@ -36,12 +49,15 @@ button {
   margin: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 button:hover {
   background-color: #3e2b26;
+  transform: translateY(-1px);
 }
 
+/* 抽出的卡牌區 */
 .card {
   background: #fff;
   padding: 1.5rem;
@@ -58,4 +74,31 @@ h2 {
 .content {
   font-size: 1.1rem;
   color: #444;
+  line-height: 1.6;
+}
+
+/* 點我揭示 */
+.toggle-btn {
+  background-color: #5a3e36;
+  color: white;
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background-color 0.2s;
+}
+
+.toggle-btn:hover {
+  background-color: #3e2b26;
+}
+
+/* 預留：正/逆位強化樣式（之後會用到） */
+.card.upright h3 {
+  color: #c2881f; /* 金色系 */
+}
+
+.card.reversed h3 {
+  color: #6a4a84; /* 紫灰系 */
 }
