@@ -55,10 +55,16 @@
     const container = document.getElementById(targetId);
     const cardBox = container.closest(".card");
 
-    // ✅ 注入正逆位樣式 class
+    // ✅ 加入正/逆位樣式 class
     cardBox.classList.remove("upright", "reversed");
     cardBox.classList.add(card.orientation === "正位" ? "upright" : "reversed");
 
+    // ✅ 加入動畫 class（先重置，再觸發）
+    cardBox.classList.remove("card-animate");
+    void cardBox.offsetWidth; // 強制 reflow 讓動畫能重新觸發
+    cardBox.classList.add("card-animate");
+
+    // ✅ 插入卡牌內容
     container.innerHTML = `
       <h3>【${card.title}】｜${card.orientation}</h3>
       <p>${icon} ${card.spell}</p>
@@ -66,12 +72,14 @@
       <div class="card-description" style="display: none;">${card.description}</div>
     `;
 
+    // ✅ 揭示牌意點擊效果
     container.querySelector(".toggle-btn").addEventListener("click", () => {
       const desc = container.querySelector(".card-description");
       desc.style.display = desc.style.display === "none" ? "block" : "none";
     });
   }
 
+  // ✨主副牌抽牌事件綁定
   document.getElementById("draw-main").addEventListener("click", () => {
     const card = drawCard("主牌");
     renderCard("main-result", "🔮", card);
@@ -82,3 +90,4 @@
     renderCard("sub-result", "🕯️", card);
   });
 </script>
+
