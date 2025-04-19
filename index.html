@@ -34,41 +34,39 @@
   </main>
 
   <script type="module">
-    import cards from './cards_full_with_minor.js';
+  import cards from './cards_full_with_minor.js';
 
-    function drawCard(type) {
-      const cardPool = cards.filter(card => card.type === type);
-      const card = cardPool[Math.floor(Math.random() * cardPool.length)];
-      const isReversed = Math.random() < 0.5;
-      const orientation = isReversed ? '逆位' : '正位';
+  function drawCard(type) {
+    const cardPool = cards.filter(card => card.type === type);
+    const card = cardPool[Math.floor(Math.random() * cardPool.length)];
+    const isReversed = Math.random() < 0.5;
+    const orientation = isReversed ? '逆位' : '正位';
 
-      return {
-        title: card.title,
-        orientation,
-        spell: isReversed ? card.reversed_spell : card.upright_spell,
-        description: isReversed ? card.reversed_meaning : card.upright_meaning
-      };
-    }
+    return {
+      title: card.title,
+      orientation,
+      spell: isReversed ? card.reversed_spell : card.upright_spell,
+      description: isReversed ? card.reversed_meaning : card.upright_meaning
+    };
+  }
 
-    document.getElementById("draw-main").addEventListener("click", () => {
-      const card = drawCard("主牌");
-      document.getElementById("main-result").innerHTML = `
-        <h3>【${card.title}】｜${card.orientation}</h3>
-        <p>🔮 ${card.spell}</p>
-        <p>${card.description}</p>
-      `;
-    });
+  document.getElementById("draw-main").addEventListener("click", () => {
+    const card = drawCard("主牌");
+    document.getElementById("main-result").innerHTML = `
+      <h3>【${card.title}】｜${card.orientation}</h3>
+      <p>🔮 ${card.spell}</p>
+      <p>${card.description}</p>
+    `;
+  });
 
-    document.getElementById("draw-sub").addEventListener("click", () => {
-      const card = drawCard("副牌");
-      document.getElementById("sub-result").innerHTML = `
-        <h3>【${card.title}】｜${card.orientation}</h3>
-        <p>🕯️ ${card.spell}</p>
-        <p>${card.description}</p>
-      `;
-    });
-  </script>
-</body>
-</html>
+  document.getElementById("draw-sub").addEventListener("click", () => {
+    const card = drawCard("副牌");
+    document.getElementById("sub-result").innerHTML = `
+      <h3>【${card.title}】｜${card.orientation}</h3>
+      <p>🕯️ ${card.spell}</p>
+      <p>${card.description}</p>
+    `;
+  });
+</script>
 
 
