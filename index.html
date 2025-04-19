@@ -28,6 +28,12 @@
     </section>
   </main>
 
-  <script src="cards-preview.js"></script>
-</body>
-</html>
+  <script type="module">
+  import cards from './cards_full_major_minor.js';
+
+  // 範例：抽一張正位主牌
+  const mainCards = cards.filter(card => card.type === "主牌");
+  const randomMainCard = mainCards[Math.floor(Math.random() * mainCards.length)];
+  console.log("🎴 抽到主牌：", randomMainCard.title, randomMainCard.upright_spell);
+</script>
+
